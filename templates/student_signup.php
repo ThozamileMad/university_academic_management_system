@@ -1,9 +1,5 @@
 <?php 
-  session_start();
-  include "form_validator.php";
-  include "../database.phpdatabase.php";
-  include "signup.php";
-
+  include "../stu_signup.php";
   $POST = $_SERVER["REQUEST_METHOD"] == "POST";
 ?>
 <!DOCTYPE html>
@@ -12,7 +8,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Student Sign Up</title>
-    <link rel="stylesheet" href="./css/auth.css" />
+    <link rel="stylesheet" href="../css/auth.css" />
   </head>
   <body>
     <?php echo $POST ? "<h2 style='color: green'>$form_status</h2>" : null; ?>

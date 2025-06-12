@@ -1,56 +1,9 @@
 <?php 
-  $db_path = "sqlite.db";
-  define("DB", new PDO("sqlite:$db_path"));
-
-  define("REGEX", array(
-    "name" => [
-        // Disallow digits
-        "/\d/",
-        // Disallow special characters except apostrophes, hyphens, and spaces
-        "/[^a-zA-Z\p{L}\s\'\-]/u",
-        // Disallow leading/trailing spaces
-        "/^\s+|\s+$/",
-        // Disallow multiple spaces
-        "/\s{2,}/",
-        // Disallow multiple consecutive hyphens
-        "/-{2,}/"
-    ],
-    "email" => [
-        // Disallow leading/trailing whitespace
-        "/^\s+|\s+$/",
-        // Disallow any character not valid in an email
-        "/[^a-zA-Z0-9@._\-]/",
-        // Ensure it matches the basic email pattern (fail if it doesn't)
-        "/^(?![^\@]+@[^\@]+\.[^\@]+$)/"
-    ],
-    "program" => [
-        // Disallow empty string
-        "/^$/",
-        // Disallow anything that's not an uppercase letter or digit
-        "/[^A-Z0-9]/"
-    ],
-    "password" => [
-        // Disallow leading/trailing whitespace
-        "/^\s+|\s+$/",
-        // Disallow anything outside of letters, numbers, and common symbols
-        "/[^a-zA-Z0-9!@#$%^&*()_\-+=]/"
-    ]
-  ));
-
-
-  define("MAX_LENGTH", array(
-    "name" => 50,
-    "email" => 255,
-    "program" => 6,
-    "password" => 8,
-  ));
-
-  define("MIN_LENGTH", array(
-    "name" => 1,
-    "email" => 1,
-    "program" => 1,
-    "password" => 1,
-  ));
+  session_start();
+  include "global.php";
+  include "form_validator.php";
+  include "database.php";
+  include "session.php";
 
   define("KEYS", [
     "name", 
@@ -62,11 +15,9 @@
   ]);
 
   // Exit if logged in
-  unset($_SESSION["stu_id"]);
-  if (isset($_SESSION["stu_id"])) {
-    header("Location: home.php");
-    exit();
-  }
+  $Database = new Database(DB);
+  $session = new Session("student", $Database);
+  $session->user_logged_in("home.php");
 
   if ($_SERVER["REQUEST_METHOD"] != "POST") {
     return;
@@ -89,7 +40,6 @@
   ]);
 
   $FormValidator = new FormValidator(REGEX, MAX_LENGTH, MIN_LENGTH, KEYS, TARGETS);
-  $Database = new Database(DB);
   $stu_num = strval((integer) $Database->get_last_primary_key("STU_NUM", "STUDENT") + 1);
   $error = null;
   $form_status = null;
@@ -140,12 +90,15 @@
   );
 
   // Login User
-  $_SESSION["stu_id"] =  $stu_num;
-  $_SESSION["dept_code"] = $dept_code;
-  $_SESSION["stu_fname"] = $stu_fname;
-  $_SESSION["stu_lname"] = $stu_lname;
-  $_SESSION["stu_email"] = $stu_email;
-  $_SESSION["last_activity"] = time();
+  $session->login_user([
+    "id" => $stu_num,
+    "dept_code" => $dept_code,
+    "fname" => $stu_fname,
+    "lname" => $stu_lname,
+    "email" => $stu_email,
+    "last_activity" => time()
+  ]);
+
 
   $form_status = "Form Submitted";
 ?>

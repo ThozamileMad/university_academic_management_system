@@ -27,7 +27,6 @@
         $stmt->execute();
       }
 
-
       public function check_user_existence($column_name, $table_name, $search_val) {
         $stmt = $this->db->prepare("SELECT $column_name FROM $table_name");
         $stmt->execute();
@@ -41,5 +40,24 @@
         
         return false;
       }
+
+      public function update_table($table_name, $values, $condition) {
+        $set_parts = [];
+        foreach ($values as $column => $value) {
+            $set_parts[] = "$column = :$column";
+        }
+
+        $set_clause = implode(", ", $set_parts);
+        $sql = "UPDATE $table_name SET $set_clause WHERE $condition";
+        $stmt = $this->db->prepare($sql);
+
+        foreach ($values as $column => $value) {
+            $stmt->bindValue(":$column", $value);
+        }
+
+        // Execute
+        return $stmt->execute();
+    }
+
     }
 ?>

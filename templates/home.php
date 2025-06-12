@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>University Academic Management System</title>
-  <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="../css/home.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -24,7 +24,7 @@
     <div class="buttons">
       <a href="#">Login as Admin</a>
       <a href="#">Login as Professor</a>
-      <a href="#">Login as Student</a>
+      <a href="./student_login.php">Login as Student</a>
     </div>
   </section>
 
