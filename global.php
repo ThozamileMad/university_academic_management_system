@@ -42,7 +42,7 @@
     "name" => 50,
     "email" => 255,
     "program" => 6,
-    "password" => 8,
+    "password" => 255,
   ));
 
   define("MIN_LENGTH", array(

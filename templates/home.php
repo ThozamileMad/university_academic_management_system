@@ -22,8 +22,8 @@
     <h1>Welcome to the University Academic Management System</h1>
     <p>Manage Courses, Students, Professors, and Enrollments with Ease.</p>
     <div class="buttons">
-      <a href="#">Login as Admin</a>
-      <a href="#">Login as Professor</a>
+      <a href="./admin_login.php">Login as Admin</a>
+      <a href="./professor_login.php">Login as Professor</a>
       <a href="./student_login.php">Login as Student</a>
     </div>
   </section>

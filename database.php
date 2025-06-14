@@ -55,9 +55,16 @@
             $stmt->bindValue(":$column", $value);
         }
 
-        // Execute
         return $stmt->execute();
     }
 
+    function get_info($column_name, $table, $condition, $params, $all=false) {
+      $pdo = $this->db;
+      $sql = "SELECT $column_name FROM $table WHERE $condition";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute($params);
+
+      return $all ? $stmt->fetchAll() : $stmt->fetchColumn();
     }
+  }
 ?>

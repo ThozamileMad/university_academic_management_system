@@ -11,7 +11,7 @@
   ]);
 
   // Exit if logged in
-  $session = new Session("student", new Database(DB));
+  $session = new Session("user", new Database(DB));
   $session->user_logged_in("home.php");
 
   if ($_SERVER["REQUEST_METHOD"] != "POST") {
@@ -60,31 +60,21 @@
     $error = "Email not found.";
     return;
   }
-
-  // Get database credentials 
-  function get_info($column_name, $table, $condition, $params) {
-    $pdo = DB;
-    $sql = "SELECT $column_name FROM $table WHERE $condition";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    return $stmt->fetchColumn();
-  }
   
   // Fetch hashed password from DB using email
-  $hashed_password = get_info("STU_PASSWORD", "STUDENT", "STU_EMAIL = ?", [$stu_email]);
+  $hashed_password = $Database->get_info("STU_PASSWORD", "STUDENT", "STU_EMAIL = ?", [$stu_email]);
   
   if (!password_verify($stu_password, $hashed_password)) {
       $error = "Incorrect password.";
       return;
   }
-
   
   // 3. Login user
   $session->login_user([
-      "id" => get_info("STU_NUM", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
-      "dept_code" => get_info("DEPT_CODE", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
-      "fname" => get_info("STU_FNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
-      "lname" => get_info("STU_LNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
+      "id" => $Database->get_info("STU_NUM", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
+      "dept_code" => $Database->get_info("DEPT_CODE", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
+      "fname" => $Database->get_info("STU_FNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
+      "lname" => $Database->get_info("STU_LNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
       "email" => $stu_email,
       "last_activity" => time()
   ]);

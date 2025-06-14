@@ -16,7 +16,15 @@
 
   // Exit if logged in
   $Database = new Database(DB);
-  $session = new Session("student", $Database);
+  $session = new Session("user", $Database);
+  /*$session->login_user([
+    "id" => 30001,
+    "dept_code" => 101,
+    "fname" => "Alice",
+    "lname" => "Brown",
+    "email" => "alice.brown@student.university.edu",
+    "last_activity" => time(),
+  ]);*/
   $session->user_logged_in("home.php");
 
   if ($_SERVER["REQUEST_METHOD"] != "POST") {
