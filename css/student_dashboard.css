@@ -40,9 +40,14 @@ th {
   color: white;
 }
 
-.logout-btn {
+.btn-div {
+  display: flex;
+  justify-content: end;
+  column-gap: 10px;
+}
+
+.btn-div * {
   float: right;
-  background: #dc3545;
   color: white;
   padding: 8px 16px;
   text-decoration: none;
@@ -50,6 +55,18 @@ th {
   font-weight: bold;
 }
 
+.logout-btn {
+  background-color: #dc3545;
+}
+
 .logout-btn:hover {
-  background: #c82333;
+  background-color: #c82333;
+}
+
+.enroll-btn {
+  background-color: #059669;
+}
+
+.enroll-btn:hover {
+  background-color: #047857;
 }

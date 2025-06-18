@@ -11,10 +11,12 @@
   ]);
 
   // Exit if logged in
-  $session = new Session("user", new Database(DB));
+  $Database = new Database(DB);
+  $session = new Session("user", $Database);
   $session->user_logged_in("home.php");
 
-  if ($_SERVER["REQUEST_METHOD"] != "POST") {
+  $POST = $_SERVER["REQUEST_METHOD"] == "POST";
+  if (!$POST) {
     return;
   }
 
@@ -27,9 +29,7 @@
   ]);
 
   $FormValidator = new FormValidator(REGEX, MAX_LENGTH, MIN_LENGTH, KEYS, TARGETS);
-  $Database = new Database(DB);
   $error = null;
-  $form_status = null;
 
   // Regex Validation Process
   $valid_regex = $FormValidator->validate_all_regex();
@@ -68,16 +68,19 @@
       $error = "Incorrect password.";
       return;
   }
+
+  $id = $Database->get_info("STU_NUM", "STUDENT", "STU_EMAIL = ?", [$stu_email]);
+  $Database->update_table("STUDENT", ["LAST_ACTIVITY" => time()], "STU_NUM = $id");
   
   // 3. Login user
   $session->login_user([
-      "id" => $Database->get_info("STU_NUM", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
-      "dept_code" => $Database->get_info("DEPT_CODE", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
+      "role" => "student",
+      "id" => $id,
       "fname" => $Database->get_info("STU_FNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
       "lname" => $Database->get_info("STU_LNAME", "STUDENT", "STU_EMAIL = ?", [$stu_email]),
       "email" => $stu_email,
       "last_activity" => time()
   ]);
   
-  $form_status = "Form Submitted";
+  header("Location: student_dashboard.php");
 ?>

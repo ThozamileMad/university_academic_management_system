@@ -17,21 +17,12 @@
   // Exit if logged in
   $Database = new Database(DB);
   $session = new Session("user", $Database);
-  /*$session->login_user([
-    "id" => 30001,
-    "dept_code" => 101,
-    "fname" => "Alice",
-    "lname" => "Brown",
-    "email" => "alice.brown@student.university.edu",
-    "last_activity" => time(),
-  ]);*/
   $session->user_logged_in("home.php");
-
-  if ($_SERVER["REQUEST_METHOD"] != "POST") {
+  $POST = $_SERVER["REQUEST_METHOD"] == "POST";
+  if (!$POST) {
     return;
   }
-
-  $dept_code = $_POST['program'];
+  
   $stu_lname = $_POST['lname'];
   $stu_fname = $_POST['fname'];
   $stu_email = $_POST['email'];
@@ -50,7 +41,6 @@
   $FormValidator = new FormValidator(REGEX, MAX_LENGTH, MIN_LENGTH, KEYS, TARGETS);
   $stu_num = strval((integer) $Database->get_last_primary_key("STU_NUM", "STUDENT") + 1);
   $error = null;
-  $form_status = null;
 
   // Regex Validation Process
   $valid_regex = $FormValidator->validate_all_regex();
@@ -88,25 +78,23 @@
     return;
   }
 
-
   // Add data to database
   $hashed_password = password_hash($stu_password, PASSWORD_DEFAULT);
   $Database->insert_into_table(
     "STUDENT",
-    ["STU_NUM", "DEPT_CODE", "STU_LNAME", "STU_FNAME", "STU_EMAIL", "STU_PASSWORD", "LAST_ACTIVITY"], 
-    [$stu_num, $dept_code, $stu_lname, $stu_fname, $stu_email, $hashed_password, time()],
+    ["STU_NUM", "STU_LNAME", "STU_FNAME", "STU_EMAIL", "STU_PASSWORD", "LAST_ACTIVITY"], 
+    [$stu_num, $stu_lname, $stu_fname, $stu_email, $hashed_password, time()],
   );
 
   // Login User
   $session->login_user([
+    "role" => "student",
     "id" => $stu_num,
-    "dept_code" => $dept_code,
     "fname" => $stu_fname,
     "lname" => $stu_lname,
     "email" => $stu_email,
     "last_activity" => time()
   ]);
 
-
-  $form_status = "Form Submitted";
+  header("Location: student_dashboard.php");
 ?>

@@ -1,6 +1,5 @@
 <?php 
   include "../stu_login.php"; 
-  $POST = $_SERVER["REQUEST_METHOD"] == "POST";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +10,6 @@
     <link rel="stylesheet" href="../css/auth.css" />
   </head>
   <body>
-    <?php echo $POST ? "<h2 style='color: green'>$form_status</h2>" : null; ?>
     <div class="auth-container">
       <h2>Student Login</h2>
       <form action="student_login.php" method="POST">

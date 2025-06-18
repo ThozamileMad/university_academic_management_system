@@ -78,6 +78,7 @@
 
   // Login user
   $session->login_user([
+    "role" => "professor",
     "id" => $Database->get_info("PROF_CODE", "PROFESSOR", "PROF_EMAIL = ?", [$prof_email]),
     "dept_code" => $Database->get_info("DEPT_CODE", "PROFESSOR", "PROF_EMAIL = ?", [$prof_email]),
     "fname" => $Database->get_info("PROF_FNAME", "PROFESSOR", "PROF_EMAIL = ?", [$prof_email]),

@@ -1,5 +1,5 @@
 <?php 
-  $db_path = "../sqlite.db";
+  $db_path = __DIR__ . "/sqlite.db";
   define("DB", new PDO("sqlite:$db_path"));
 
   define("REGEX", array(

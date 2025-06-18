@@ -58,6 +58,15 @@
         return $stmt->execute();
     }
 
+    function get_all_info($table) {
+      $pdo = $this->db;
+      $sql = "SELECT * FROM $table";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute();
+
+      return $stmt->fetchAll();
+    }
+
     function get_info($column_name, $table, $condition, $params, $all=false) {
       $pdo = $this->db;
       $sql = "SELECT $column_name FROM $table WHERE $condition";
